@@ -14,16 +14,9 @@
     {
       "type": "board-ssd1306",
       "id": "board-ssd1306-0",
-      "top": 281.54,
-      "left": -143.77,
+      "top": 300.74,
+      "left": -162.97,
       "attrs": {}
-    },
-    {
-      "type": "wokwi-pushbutton",
-      "id": "wokwi-pushbutton-0",
-      "top": 121.4,
-      "left": 28.8,
-      "attrs": { "bounce": "1", "color": "white" }
     },
     {
       "type": "wokwi-dht22",
@@ -31,7 +24,7 @@
       "top": 168,
       "left": -238.5,
       "rotate": 270,
-      "attrs": {}
+      "attrs": { "humidity": "30.5", "temperature": "-1.4" }
     },
     {
       "type": "wokwi-ds1307",
@@ -40,6 +33,14 @@
       "left": -261.3,
       "rotate": 180,
       "attrs": {}
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btn1",
+      "top": 153.5,
+      "left": 3.5,
+      "rotate": 90,
+      "attrs": { "color": "white" }
     }
   ],
   "connections": [
@@ -63,13 +64,20 @@
       "red",
       [ "h19.2", "v19.2", "h-163.2", "v-220.8", "h297.6", "v28.8" ]
     ],
-    [ "board-ssd1306-0:VCC", "pico:VSYS", "red", [ "v-19.2", "h96.15", "v-201.6" ] ],
     [ "wokwi-ds1307-0:GND", "pico:GND.2", "black", [ "h57.6", "v-28.8" ] ],
     [ "wokwi-dht22-0:GND", "pico:GND.3", "black", [ "h48", "v-48" ] ],
     [ "board-ssd1306-0:GND", "pico:GND.4", "black", [ "v-67.2" ] ],
     [ "wokwi-dht22-0:SDA", "pico:GP14", "green", [ "h19.2", "v-86.5" ] ],
-    [ "board-ssd1306-0:SDA", "pico:GP15", "orange", [ "v-38.4", "h0.07" ] ],
-    [ "board-ssd1306-0:SCL", "pico:GP13", "purple", [ "v-28.8", "h-9.3", "v-48" ] ]
+    [
+      "board-ssd1306-0:SDA",
+      "pico:GP4",
+      "orange",
+      [ "v-28.8", "h-47.93", "v-124.8", "h-9.6", "v-28.8" ]
+    ],
+    [ "board-ssd1306-0:SCL", "pico:GP5", "purple", [ "v-57.6", "h-9.3", "v-134.4" ] ],
+    [ "board-ssd1306-0:VCC", "pico:VSYS", "red", [ "v-48", "h115.35", "v-192" ] ],
+    [ "pico:GND.5", "btn1:2.r", "black", [ "h0" ] ],
+    [ "btn1:1.l", "pico:GP27", "green", [ "v0" ] ]
   ],
   "dependencies": {}
 }
