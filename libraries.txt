@@ -1,6 +1,4 @@
-# Wokwi Library List
-# See https://docs.wokwi.com/guides/libraries
-
 RTClib
 TM1637_RT
-DHTlib
+DHT sensor library
+lcdgfx
