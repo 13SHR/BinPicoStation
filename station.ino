@@ -1,13 +1,12 @@
 #include "RTClib.h"
 #include <TM1637.h>
 #include "DHT.h"
-#include <Adafruit_SSD1306.h>
-#include <Wire.h> // Needed for the OLED Adafruit library
+#include "lcdgfx.h"
 
 RTC_DS1307 rtc;
 TM1637 TM;
 DHT dht(14, DHT22);
-Adafruit_SSD1306 oled(128, 64, &Wire);
+DisplaySSD1306_128x64_I2C oled(-1);
 
 char strBuf[50];
 
@@ -33,13 +32,9 @@ void setup() {
   dht.begin();
 
   // OLED display
-  if (oled.begin()) {
-    Serial1.println("Tout est bon");
-  } else {
-    Serial1.println("C'est ici que ça coince");
-  }
-  oled.clearDisplay();
-  oled.setTextColor(SSD1306_WHITE);
+  oled.setFixedFont( ssd1306xled_font6x8 );
+  oled.begin();
+  oled.clear();
 }
 
 void loop() {
@@ -57,18 +52,9 @@ void loop() {
   Serial1.print(h);
   Serial1.println();
 
-  oled.setCursor(40, 0);
-  oled.println("Station Sensors:");
+  oled.printFixed(0,  8, "Station Sensors", STYLE_NORMAL);
+  oled.printFixed(0,  16, "Placeholder Temperature", STYLE_NORMAL);
+  oled.printFixed(0,  24, "Placeholder Humidity", STYLE_NORMAL);
   
-  oled.setCursor(60, 20);
-  oled.print("T:");
-  oled.print(t);
-  oled.println(" °C");
-
-  oled.setCursor(60, 30);
-  oled.print("H: ");
-  oled.print(h);
-  oled.println(" %");
-
-  delay(1000); // this speeds up the simulation
+  delay(1000);
 }
