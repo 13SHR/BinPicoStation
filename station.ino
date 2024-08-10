@@ -8,12 +8,13 @@ TM1637 TM;
 DHT dht(14, DHT22);
 DisplaySSD1306_128x64_I2C oled(-1);
 
-const int buttonPin = 21;
-int oldValue = LOW; // default/idle value for pin 8 is low.
+const int buttonPin = 27;
+int oldValue = LOW;
 
 char strBuf[50];
 
-int colon = 0; // boolean to make the colon blink each second
+bool colon = true; // boolean to make the colon blink each second
+unsigned long previousClock;
 
 void setup() {
   // put your setup code here, to run once:
@@ -45,30 +46,36 @@ void setup() {
 
 void loop() {
   int newValue = digitalRead(buttonPin);
+  unsigned long currentClock = millis(); // Timer for clock
 
   DateTime now = rtc.now();
   int hour = now.hour();
   int minutes = now.minute();
 
-  TM.displayTime(hour, minutes, colon); // Display time
-  colon = colon ? 0 : 1;
+  if(currentClock - previousClock >= 1000)
+  {
+    previousClock += 1000;
 
-  if (newValue != oldValue) {
-    if (newValue == HIGH) {
-      float t = dht.readTemperature();
-      float h = dht.readHumidity();
-      
+    TM.displayTime(hour, minutes, colon);
+    colon = !colon;
+  }
+
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  
+  // Display the sensors data only if the button is pressed
+  if (oldValue != newValue) {
+    oldValue = newValue;
+    if (newValue == LOW) {
       oled.clear();
       oled.printFixed(24,  8, "Station Sensors", STYLE_NORMAL);
       sprintf(strBuf, "Temp: %.2f C", t);
-      oled.printFixed(0,  24, strBuf, STYLE_NORMAL);
+      oled.printFixed(5,  24, strBuf, STYLE_NORMAL);
       sprintf(strBuf, "Hum: %.2f %%", h);
-      oled.printFixed(0,  32, strBuf, STYLE_NORMAL);
-    }
-    else {
+      oled.printFixed(5,  32, strBuf, STYLE_NORMAL);
+    } else {
       oled.clear();
     }
   }
-  
-  delay(1000);
+  delay(5);
 }
